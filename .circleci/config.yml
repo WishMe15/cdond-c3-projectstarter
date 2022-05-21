@@ -123,7 +123,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache
-      - run: npm auditt
+      - run: npm audit
 
   deploy-infrastructure:
     docker:
