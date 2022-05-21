@@ -101,7 +101,7 @@ jobs:
             cd backend
             npm i
             npm run test        
-  scan-frontend:
+ scan-frontend:
     docker:
       # Docker image here
       - image: circleci/node:13.8.0
@@ -110,8 +110,12 @@ jobs:
       # Restore from cache
       # Your job code here
       - checkout
-      - restore_cache
-      - run: npm audit
+      - restore_cache:
+      - run: cd frontend
+      - run: npm i
+      - run: npm install oauth-sign@^0.9.0
+      - run: npm audit --audit-level=critical
+
 
   scan-backend:
     docker:
@@ -122,8 +126,12 @@ jobs:
       # Restore from cache
       # Your job code here
       - checkout
-      - restore_cache
-      - run: npm audit
+      - restore_cache:
+      - restore_cache:
+      - run: cd frontend
+      - run: npm i
+      - run: npm install oauth-sign@^0.9.0
+      - run: npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
