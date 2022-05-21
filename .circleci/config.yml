@@ -77,7 +77,7 @@ jobs:
       # Restore from cache
       # Your job code here
       - checkout
-      - restore_cache
+      - restore_cache:
       - run:
           command: 
             cd frontend
@@ -93,7 +93,7 @@ jobs:
       # Restore from cache
       # Your job code here
       - checkout
-      - restore_cache
+      - restore_cache:
       - run:
           command: 
             cd backend
@@ -108,8 +108,12 @@ jobs:
       # Restore from cache
       # Your job code here
       - checkout
-      - restore_cache
-      - run: npm auditt
+      - restore_cache:
+      - run: cd frontend
+      - run: npm i
+      - run: npm install oauth-sign@^0.9.0
+      - run: npm audit --audit-level=critical
+
 
   scan-backend:
     docker:
@@ -120,8 +124,12 @@ jobs:
       # Restore from cache
       # Your job code here
       - checkout
-      - restore_cache
-      - run: npm audit
+      - restore_cache:
+      - restore_cache:
+      - run: cd frontend
+      - run: npm i
+      - run: npm install oauth-sign@^0.9.0
+      - run: npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
