@@ -110,7 +110,7 @@ jobs:
       - checkout
       - restore_cache:
       - run: cd frontend
-      - run: npm i
+      - run: npm install
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
 
@@ -127,7 +127,7 @@ jobs:
       - restore_cache:
       - restore_cache:
       - run: cd frontend
-      - run: npm i
+      - run: npm install
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
 
