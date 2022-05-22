@@ -1,5 +1,7 @@
 version: 2.1
 
+orbs: 
+  slack: circleci/slack@4.10.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -50,6 +52,14 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - save_cache:
+          commands:
+            send_slack_messages_on_fail:
+              steps:
+                - slack/status:
+                    fail_only: true
+                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+
 
   build-backend:
     docker:
@@ -68,6 +78,14 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      - save_cache:
+          commands:
+            send_slack_messages_on_fail:
+              steps:
+                - slack/status:
+                    fail_only: true
+                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+
 
   test-frontend:
     docker:
@@ -82,7 +100,15 @@ jobs:
           command: 
             cd frontend
             npm i
-            npm run test    
+            npm run test 
+      - save_cache:
+          commands:
+            send_slack_messages_on_fail:
+              steps:
+                - slack/status:
+                    fail_only: true
+                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+   
 
   test-backend:
     docker:
@@ -98,7 +124,15 @@ jobs:
           command: 
             cd backend
             npm i
-            npm run test        
+            npm run test
+      - save_cache:
+          commands:
+            send_slack_messages_on_fail:
+              steps:
+                - slack/status:
+                    fail_only: true
+                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+        
   scan-frontend:
     docker:
       # Docker image here
@@ -113,6 +147,14 @@ jobs:
       - run: npm i
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
+    - save_cache:
+          commands:
+            send_slack_messages_on_fail:
+              steps:
+                - slack/status:
+                    fail_only: true
+                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+
 
 
   scan-backend:
@@ -130,6 +172,13 @@ jobs:
       - run: npm i
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
+    - save_cache:
+          commands:
+            send_slack_messages_on_fail:
+              steps:
+                - slack/status:
+                    fail_only: true
+                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
 
   deploy-infrastructure:
     docker:
