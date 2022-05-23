@@ -52,6 +52,14 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - save_cache:
+          commands:
+            send_slack_messages_on_fail:
+              steps:
+                - slack/status:
+                    fail_only: true
+                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+
 
   build-backend:
     docker:
