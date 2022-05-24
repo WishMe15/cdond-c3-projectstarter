@@ -52,13 +52,16 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - save_cache:
-          commands:
-            send_slack_messages_on_fail:
-              steps:
-                - slack/status:
-                    fail_only: true
-                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+	        event: fail
+	        template: basic_fail_1
+      - slack/notify:
+	        event: pass
+	        template: success_tagged_deploy_1
 
 
   build-backend:
@@ -78,13 +81,16 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - save_cache:
-          commands:
-            send_slack_messages_on_fail:
-              steps:
-                - slack/status:
-                    fail_only: true
-                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+	        event: fail
+	        template: basic_fail_1
+      - slack/notify:
+	        event: pass
+	        template: success_tagged_deploy_1
 
 
   test-frontend:
@@ -101,14 +107,17 @@ jobs:
             cd frontend
             npm i
             npm run test 
-      - save_cache:
-          commands:
-            send_slack_messages_on_fail:
-              steps:
-                - slack/status:
-                    fail_only: true
-                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
-   
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+	        event: fail
+	        template: basic_fail_1
+      - slack/notify:
+	        event: pass
+	        template: success_tagged_deploy_1
+
 
   test-backend:
     docker:
@@ -125,13 +134,17 @@ jobs:
             cd backend
             npm i
             npm run test
-      - save_cache:
-          commands:
-            send_slack_messages_on_fail:
-              steps:
-                - slack/status:
-                    fail_only: true
-                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+	        event: fail
+	        template: basic_fail_1
+      - slack/notify:
+	        event: pass
+	        template: success_tagged_deploy_1
+
         
   scan-frontend:
     docker:
@@ -147,14 +160,17 @@ jobs:
       - run: npm i
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
-    - save_cache:
-          commands:
-            send_slack_messages_on_fail:
-              steps:
-                - slack/status:
-                    fail_only: true
-                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
-
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+	        event: fail
+	        template: basic_fail_1
+      - slack/notify:
+	        event: pass
+	        template: success_tagged_deploy_1
+  
 
 
   scan-backend:
@@ -172,13 +188,16 @@ jobs:
       - run: npm i
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
-    - save_cache:
-          commands:
-            send_slack_messages_on_fail:
-              steps:
-                - slack/status:
-                    fail_only: true
-                    failure_message: ':red_circle: $CIRCLE_JOB job has failed! Visit here: $CIRCLE_BUILD_URL'
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+	        event: fail
+	        template: basic_fail_1
+      - slack/notify:
+	        event: pass
+	        template: success_tagged_deploy_1
 
   deploy-infrastructure:
     docker:
