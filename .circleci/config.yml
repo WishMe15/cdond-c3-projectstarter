@@ -1,7 +1,34 @@
 version: 2.1
+orbs:
+  slack: circleci/slack@4.9.3
+jobs:
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
+workflows:
+  send-notification:
+    jobs:
+      - notify:
+          context: slack-secrets
 
-orbs: 
-  slack: circleci/slack@4.10.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -52,16 +79,17 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+jobs:
   notify:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - slack/notify:
-	        event: fail
-	        template: basic_fail_1
-      - slack/notify:
-	        event: pass
-	        template: success_tagged_deploy_1
+- slack/notify:
+	  event: fail
+	  template: basic_fail_1
+- slack/notify:
+	  event: pass
+	  template: success_tagged_deploy_1
 
 
   build-backend:
@@ -81,16 +109,17 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+jobs:
   notify:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - slack/notify:
-	        event: fail
-	        template: basic_fail_1
-      - slack/notify:
-	        event: pass
-	        template: success_tagged_deploy_1
+- slack/notify:
+	  event: fail
+	  template: basic_fail_1
+- slack/notify:
+	  event: pass
+	  template: success_tagged_deploy_1
 
 
   test-frontend:
@@ -107,17 +136,17 @@ jobs:
             cd frontend
             npm i
             npm run test 
+jobs:
   notify:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - slack/notify:
-	        event: fail
-	        template: basic_fail_1
-      - slack/notify:
-	        event: pass
-	        template: success_tagged_deploy_1
-
+- slack/notify:
+	  event: fail
+	  template: basic_fail_1
+- slack/notify:
+	  event: pass
+	  template: success_tagged_deploy_1
 
   test-backend:
     docker:
@@ -134,17 +163,17 @@ jobs:
             cd backend
             npm i
             npm run test
+jobs:
   notify:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - slack/notify:
-	        event: fail
-	        template: basic_fail_1
-      - slack/notify:
-	        event: pass
-	        template: success_tagged_deploy_1
-
+- slack/notify:
+	  event: fail
+	  template: basic_fail_1
+- slack/notify:
+	  event: pass
+	  template: success_tagged_deploy_1
         
   scan-frontend:
     docker:
@@ -160,17 +189,17 @@ jobs:
       - run: npm i
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
+jobs:
   notify:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - slack/notify:
-	        event: fail
-	        template: basic_fail_1
-      - slack/notify:
-	        event: pass
-	        template: success_tagged_deploy_1
-  
+- slack/notify:
+	  event: fail
+	  template: basic_fail_1
+- slack/notify:
+	  event: pass
+	  template: success_tagged_deploy_1
 
 
   scan-backend:
@@ -188,16 +217,17 @@ jobs:
       - run: npm i
       - run: npm install oauth-sign@^0.9.0
       - run: npm audit --audit-level=critical
+jobs:
   notify:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - slack/notify:
-	        event: fail
-	        template: basic_fail_1
-      - slack/notify:
-	        event: pass
-	        template: success_tagged_deploy_1
+- slack/notify:
+	  event: fail
+	  template: basic_fail_1
+- slack/notify:
+	  event: pass
+	  template: success_tagged_deploy_1
 
   deploy-infrastructure:
     docker:
