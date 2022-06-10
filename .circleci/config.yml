@@ -39,7 +39,7 @@ jobs:
           command: | 
             cd frontend
             npm install
-            npm run buil
+            npm run build
 
 workflows:
   default:
